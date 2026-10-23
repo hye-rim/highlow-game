@@ -1,4 +1,6 @@
 'use strict';
+// 오락실 튜토리얼이 '진짜로 일어난 일'을 알아채는 신호 (arcade/public/tutorial.js 가 듣는다. 튜토리얼이 아니면 아무도 안 듣는다)
+const tutorialSignal = (type) => window.dispatchEvent(new CustomEvent('arcade:tutorial', { detail: { type } }));
 
 // 하이로우: 화면·입력·소리. 규칙(카드·확률·점수·하트)은 logic.js (LOGIC_HIGHLOW)
 (() => {
@@ -102,6 +104,7 @@ function pick(which) {
   if (!playing || busy || st.over) return;
   const r = L.guess(st, which);
   if (!r) return;
+  tutorialSignal('pick');
   busy = true;
   sfx.flip();
   setCard($('nextCard'), r.card, `flip ${r.outcome}`);
